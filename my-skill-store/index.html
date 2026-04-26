@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的 Agent Skill 商店</title>
+    <title>我的 Skill 商店</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f5f7; color: #1d1d1f; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; }
         h1 { text-align: center; margin: 40px 0 20px; font-size: 2.5rem; }
@@ -32,59 +31,27 @@
         .footer { text-align: center; margin: 40px 0; color: #999; font-size: 0.9rem; }
     </style>
 </head>
-<script>
-function copyWeatherSkill() {
-    const text = `你是一个专业的天气查询助手，名字叫“Weather Skill”。
-
-## 你的能力
-- 根据用户提供的城市名，查询并返回当天的实时天气信息。
-- 如果用户输入的城市名不完整或不支持查询，将返回“暂时只支持查询今日天气”。
-- 如果城市名不明确，将默认使用城市名。
-
-## 输入
-用户会给你一个城市名，例如：“北京”。
-
-## 输出规则
-你必须严格按照以下格式返回：
-📅 日期：{日期}
-📍 城市：{城市名}
-🌤️ 天气：{天气状况}
-🌡️ 温度：{温度}℃（体感 {体感温度}℃）
-💧 湿度：{湿度}%
-🌬️ 风力：{风力等级}级 {风向}
-
-## 特殊情况
-- 查不到城市时，回复“抱歉，没有找到【城市名】的天气信息。”
-- 输入非城市名时，回复“请告诉我你想查询的城市名称。”
-- 所有回复使用中文。`;
-
-    navigator.clipboard.writeText(text).then(() => {
-        alert('✅ 提示词已复制到剪贴板！去粘贴到 Coze 或 Dify 里吧。');
-    });
-}
-</script>
-    <body>
+<body>
     <div class="container">
         <h1>🧰 我的 Skill 商店</h1>
         <p class="subtitle">为你的 AI Agent 添加超能力</p>
 
-        <!-- 技能列表：每一块就是一个 Skill，要改内容就是改下面这堆 -->
         <div class="skill-card">
-    <div class="skill-icon">🌦️</div>
-    <div class="skill-info">
-        <h3>天气查询</h3>
-        <p>输入城市名，返回实时天气。适用于出差、旅行提醒助手。</p>
-        <button class="download-btn" onclick="copyWeatherSkill()">📋 复制提示词</button>
-    </div>
-</div>
+            <div class="skill-icon">🌦️</div>
+            <div class="skill-info">
+                <h3>天气查询</h3>
+                <p>输入城市名，返回实时天气。适用于出差、旅行提醒助手。</p>
+                <a href="skills/weather-skill.zip" class="download-btn">下载提示词</a>
+            </div>
+        </div>
 
         <div class="skill-card">
             <div class="skill-icon">📧</div>
             <div class="skill-info">
                 <h3>邮件发送</h3>
                 <p>通过 SMTP 自动发送邮件，支持附件，可用于日报、通知 Agent。</p>
+                <a href="skills/email-skill.zip" class="download-btn">下载</a>
             </div>
-            <a href="skills/email-skill.zip" class="download-btn">下载</a>
         </div>
 
         <div class="skill-card">
@@ -92,11 +59,9 @@ function copyWeatherSkill() {
             <div class="skill-info">
                 <h3>Excel 数据分析</h3>
                 <p>上传 Excel 文件，自动生成汇总图表和关键指标。</p>
+                <a href="skills/excel-skill.zip" class="download-btn">下载</a>
             </div>
-            <a href="skills/excel-skill.zip" class="download-btn">下载</a>
         </div>
-
-        <!-- 复制上面一整块 skill-card 就可以添加新 Skill -->
     </div>
     <div class="footer">由 GitHub Pages 驱动 · 免费托管</div>
 </body>
