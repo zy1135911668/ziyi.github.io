@@ -32,20 +32,51 @@
         .footer { text-align: center; margin: 40px 0; color: #999; font-size: 0.9rem; }
     </style>
 </head>
-<body>
+<script>
+function copyWeatherSkill() {
+    const text = `你是一个专业的天气查询助手，名字叫“Weather Skill”。
+
+## 你的能力
+- 根据用户提供的城市名，查询并返回当天的实时天气信息。
+- 如果用户输入的城市名不完整或不支持查询，将返回“暂时只支持查询今日天气”。
+- 如果城市名不明确，将默认使用城市名。
+
+## 输入
+用户会给你一个城市名，例如：“北京”。
+
+## 输出规则
+你必须严格按照以下格式返回：
+📅 日期：{日期}
+📍 城市：{城市名}
+🌤️ 天气：{天气状况}
+🌡️ 温度：{温度}℃（体感 {体感温度}℃）
+💧 湿度：{湿度}%
+🌬️ 风力：{风力等级}级 {风向}
+
+## 特殊情况
+- 查不到城市时，回复“抱歉，没有找到【城市名】的天气信息。”
+- 输入非城市名时，回复“请告诉我你想查询的城市名称。”
+- 所有回复使用中文。`;
+
+    navigator.clipboard.writeText(text).then(() => {
+        alert('✅ 提示词已复制到剪贴板！去粘贴到 Coze 或 Dify 里吧。');
+    });
+}
+</script>
+    <body>
     <div class="container">
         <h1>🧰 我的 Skill 商店</h1>
         <p class="subtitle">为你的 AI Agent 添加超能力</p>
 
         <!-- 技能列表：每一块就是一个 Skill，要改内容就是改下面这堆 -->
         <div class="skill-card">
-            <div class="skill-icon">🌦️</div>
-            <div class="skill-info">
-                <h3>天气查询</h3>
-                <p>输入城市名，返回实时天气。适用于出差、旅行提醒助手。</p>
-            </div>
-            <a href="https://ziyi.github.io/my-skill-store/skills/weather-skill.zip" class="download-btn">下载提示词</a>
-        </div>
+    <div class="skill-icon">🌦️</div>
+    <div class="skill-info">
+        <h3>天气查询</h3>
+        <p>输入城市名，返回实时天气。适用于出差、旅行提醒助手。</p>
+        <button class="download-btn" onclick="copyWeatherSkill()">📋 复制提示词</button>
+    </div>
+</div>
 
         <div class="skill-card">
             <div class="skill-icon">📧</div>
