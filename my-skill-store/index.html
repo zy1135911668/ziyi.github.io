@@ -491,12 +491,15 @@
 <body>
     <script>
         const categoryMap = {
-            '全部':      ['skill-weather','skill-summarize','skill-github','skill-email','skill-excel','skill-healthcheck','skill-taskflow','skill-blogwatcher','skill-study-planner','skill-smart-quiz','skill-paper-generator'],
+            '全部':      ['skill-weather','skill-summarize','skill-github','skill-email','skill-excel','skill-healthcheck','skill-taskflow','skill-blogwatcher','skill-study-planner','skill-smart-quiz','skill-paper-generator','skill-social-comm','skill-travel-planner','skill-meeting-notes'],
             '🔥 热门':  ['skill-weather','skill-summarize','skill-github'],
-            '💼 办公':  ['skill-email','skill-excel'],
+            '💼 办公':  ['skill-email','skill-excel','skill-meeting-notes'],
             '🔧 系统':  ['skill-healthcheck','skill-taskflow','skill-blogwatcher'],
             '⚡ 效率':  ['skill-summarize','skill-excel'],
-            '📖 学习':  ['skill-study-planner','skill-smart-quiz','skill-paper-generator']
+            '📖 学习':  ['skill-study-planner','skill-smart-quiz','skill-paper-generator'],
+            '💬 社交':  ['skill-social-comm'],
+            '✈️ 旅行':  ['skill-travel-planner'],
+            '📝 办公':  ['skill-email','skill-excel','skill-meeting-notes']
         };
 
         function setCategory(cat) {
@@ -557,7 +560,7 @@
     <div class="stats-bar">
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-num">11</div>
+                <div class="stat-num">14</div>
                 <div class="stat-label">精选 Skills</div>
             </div>
             <div class="stat-item">
@@ -591,6 +594,9 @@
                 <button class="cat-btn">🔧 系统</button>
                 <button class="cat-btn">⚡ 效率</button>
                 <button class="cat-btn">📖 学习</button>
+                <button class="cat-btn">💬 社交</button>
+                <button class="cat-btn">✈️ 旅行</button>
+                <button class="cat-btn">📝 办公</button>
             </div>
 
             <div class="skills-grid">
@@ -835,6 +841,81 @@
                             SkillStack
                         </div>
                         <a href="skills/paper-generator-skill.zip" class="download-btn" download>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            下载
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social Comm -->
+                <div class="skill-card" id="skill-social-comm">
+                    <div class="skill-card-top">
+                        <div class="skill-icon-wrap">💬</div>
+                        <span class="skill-downloads"></span>
+                    </div>
+                    <div class="skill-name">社交沟通</div>
+                    <div class="skill-desc">高情商回复建议，生成道歉、感谢、祝福等社交消息，化解尴尬场景。</div>
+                    <div class="skill-tags">
+                        <span class="tag">社交</span>
+                        <span class="tag">沟通</span>
+                        <span class="tag tag-accent">新增</span>
+                    </div>
+                    <div class="skill-footer">
+                        <div class="skill-author">
+                            <div class="skill-author-avatar">S</div>
+                            SkillStack
+                        </div>
+                        <a href="skills/social-comm-skill.zip" class="download-btn" download>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            下载
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Travel Planner -->
+                <div class="skill-card" id="skill-travel-planner">
+                    <div class="skill-card-top">
+                        <div class="skill-icon-wrap">✈️</div>
+                        <span class="skill-downloads"></span>
+                    </div>
+                    <div class="skill-name">旅行规划</div>
+                    <div class="skill-desc">制定完整行程、推荐景点、估算预算、生成行李清单，覆盖出行全流程。</div>
+                    <div class="skill-tags">
+                        <span class="tag">旅行</span>
+                        <span class="tag">规划</span>
+                        <span class="tag tag-accent">新增</span>
+                    </div>
+                    <div class="skill-footer">
+                        <div class="skill-author">
+                            <div class="skill-author-avatar">S</div>
+                            SkillStack
+                        </div>
+                        <a href="skills/travel-planner-skill.zip" class="download-btn" download>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            下载
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Meeting Notes -->
+                <div class="skill-card" id="skill-meeting-notes">
+                    <div class="skill-card-top">
+                        <div class="skill-icon-wrap">📝</div>
+                        <span class="skill-downloads"></span>
+                    </div>
+                    <div class="skill-name">会议纪要</div>
+                    <div class="skill-desc">整理会议录音或文字，自动生成结构化纪要，提炼要点、行动事项和负责人。</div>
+                    <div class="skill-tags">
+                        <span class="tag">办公</span>
+                        <span class="tag">效率</span>
+                        <span class="tag tag-accent">新增</span>
+                    </div>
+                    <div class="skill-footer">
+                        <div class="skill-author">
+                            <div class="skill-author-avatar">S</div>
+                            SkillStack
+                        </div>
+                        <a href="skills/meeting-notes-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
                         </a>
