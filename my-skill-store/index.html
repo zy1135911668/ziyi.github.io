@@ -801,11 +801,32 @@
 
             function filterSkills() {
                 const q = document.getElementById('searchInput').value.trim().toLowerCase();
+                const activeBtn = document.querySelector('.cat-btn.active');
+                const activeCat = activeBtn ? activeBtn.textContent.trim() : '全部';
+
                 document.querySelectorAll('.skill-card').forEach(card => {
                     const name = card.querySelector('.skill-name').textContent.toLowerCase();
                     const desc = card.querySelector('.skill-desc').textContent.toLowerCase();
-                    const visible = !q || name.includes(q) || desc.includes(q);
-                    card.style.display = visible ? '' : 'none';
+                    const inCategory = categoryMap[activeCat] && categoryMap[activeCat].includes(card.id);
+                    const matchesSearch = !q || name.includes(q) || desc.includes(q);
+                    card.style.display = (inCategory && matchesSearch) ? '' : 'none';
+                });
+            }
+
+            function setCategory(cat) {
+                // Update buttons
+                document.querySelectorAll('.cat-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.textContent.trim() === cat);
+                });
+                // Show/hide cards (preserve search filter)
+                const toShow = categoryMap[cat] || [];
+                const q = document.getElementById('searchInput').value.trim().toLowerCase();
+                document.querySelectorAll('.skill-card').forEach(card => {
+                    const name = card.querySelector('.skill-name').textContent.toLowerCase();
+                    const desc = card.querySelector('.skill-desc').textContent.toLowerCase();
+                    const matchesSearch = !q || name.includes(q) || desc.includes(q);
+                    const show = toShow.includes(card.id) && matchesSearch;
+                    card.style.display = show ? '' : 'none';
                 });
             }
         });
