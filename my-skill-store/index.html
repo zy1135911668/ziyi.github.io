@@ -627,6 +627,139 @@
         }
         .hero-stat { font-size: 0.85rem; color: var(--text-secondary); }
         .hero-stat strong { color: var(--accent); font-weight: 700; }
+        .search-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .search-shortcut {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .search-shortcut kbd {
+            border: 1px solid var(--border);
+            border-bottom-width: 2px;
+            border-radius: 6px;
+            padding: 2px 7px;
+            background: white;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-family: inherit;
+        }
+        .clear-search {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: none;
+        }
+        .clear-search.visible { display: inline-flex; }
+        .results-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: -16px 0 28px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .results-count strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+        .results-query { color: var(--text-muted); }
+        .skill-card mark,
+        .tag mark {
+            background: #fff2a8;
+            color: inherit;
+            padding: 0 2px;
+            border-radius: 4px;
+        }
+        .empty-state {
+            display: none;
+            border: 1px dashed #cfd5e4;
+            border-radius: 16px;
+            padding: 44px 24px;
+            text-align: center;
+            background: linear-gradient(180deg, #fbfcff 0%, #f7f8fc 100%);
+        }
+        .empty-state.show { display: block; }
+        .empty-state h3 {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .modal-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .modal-meta-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .modal-meta-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .modal-meta-value {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .modal-preview-list,
+        .modal-example-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .modal-preview-item,
+        .modal-example-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+        .modal-preview-item strong,
+        .modal-example-item strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.88rem;
+        }
+        .modal-install {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 14px;
+            padding: 16px 18px;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        @media (max-width: 768px) {
+            .search-toolbar,
+            .results-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .modal-meta { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -1354,5 +1487,290 @@
             </div>
         </div>
     </div>
+    <script>
+        (() => {
+            const skills = [
+                { id: 'skill-weather', slug: 'weather-skill', icon: '🌦️', title: '天气查询', desc: '输入城市名，返回实时天气、空气质量和穿衣建议，适合出差与出行前快速确认。', tags: ['热门', '日常生活', '零依赖'], category: '生活助手', audience: '生活助手', install: '无需 API Key\n直接调用 wttr.in\n下载后放入 skills 目录即可', highlights: ['支持全球城市与机场代码', '可返回单行摘要、详细信息和天气图', '出差、旅行和通勤场景都顺手'], examples: ['北京今天需要带伞吗？', '上海明天气温如何？', '这周杭州天气趋势'], searchTerms: ['wttr pm2.5 温度 湿度 穿衣建议 旅行 出差'] },
+                { id: 'skill-summarize', slug: 'summarize-skill', icon: '📝', title: '文章 / 视频摘要', desc: '输入网页、视频或 PDF 链接，快速提炼重点，节省大量信息摄入时间。', tags: ['热门', 'AI 能力', '信息处理'], category: '信息获取', audience: '内容处理', install: '支持网页、YouTube、Bilibili 与 PDF\n可输出 short / medium / long 摘要\n适合和现有 Agent 工作流组合', highlights: ['支持 URL、字幕、播客与 PDF', '可按长度控制输出粒度', '支持 extract-only 与 JSON 结果'], examples: ['帮我总结这篇论文', '把这段视频压缩成 5 条要点', '提取这个 PDF 的核心结论'], searchTerms: ['摘要 总结 视频 字幕 PDF 播客 extract-only json'] },
+                { id: 'skill-github', slug: 'github-skill', icon: '🐙', title: 'GitHub 管理', desc: '用 gh CLI 快速处理 PR、Issue 和 CI，适合日常仓库维护与交付节奏管理。', tags: ['热门', '开发者', '代码管理'], category: '开发运维', audience: '开发协作', install: '需要先完成 gh auth login\n支持 SSH 或 HTTPS 仓库\n建议本地已安装 Git 与 gh CLI', highlights: ['查看 PR 状态与检查结果', '批量处理 Issue 与运行日志', '支持 GraphQL 查询扩展'], examples: ['列出待处理 PR', '查看失败 CI 日志', '创建一个新的 issue'], searchTerms: ['github gh pr issue ci action graph ql'] },
+                { id: 'skill-email', slug: 'email-skill', icon: '📨', title: '邮件发送', desc: '通过 SMTP 自动发送邮件，支持附件、多收件人和常见邮箱服务。', tags: ['办公自动化', 'SMTP'], category: '办公效率', audience: '办公协同', install: '需要 SMTP 账号配置\n推荐使用应用专用密码\n适合日报、通知和批量提醒', highlights: ['支持 Gmail、QQ 与企业邮箱', '可发送纯文本或 HTML 邮件', '支持附件和抄送配置'], examples: ['发送本周日报', '给客户批量发送通知', '附带 PDF 周报邮件'], searchTerms: ['smtp gmail qq 企业邮箱 附件 通知 日报 周报'] },
+                { id: 'skill-excel', slug: 'excel-skill', icon: '📊', title: 'Excel 数据分析', desc: '上传 Excel 或 CSV 后自动分析关键指标，生成图表与简洁结论。', tags: ['数据分析', '办公自动化'], category: '办公效率', audience: '分析助手', install: '依赖 Python 3、pandas、openpyxl、matplotlib\n适合月报、销售与运营数据处理', highlights: ['自动计算统计指标', '支持分组汇总和条件筛选', '自动输出图表和摘要报告'], examples: ['分析这份销售表', '按部门做月度汇总', '把趋势画成图表'], searchTerms: ['excel csv pandas 图表 统计 月报 销售 运营'] },
+                { id: 'skill-healthcheck', slug: 'healthcheck-skill', icon: '🔒', title: '系统安全审计', desc: '检查 SSH、防火墙、端口暴露与更新状态，快速识别服务器风险。', tags: ['安全', '服务器'], category: '开发运维', audience: '运维巡检', install: '建议先备份关键配置\n审计后再决定是否执行修复\n适合云主机与内网服务器巡检', highlights: ['覆盖 SSH、端口、防火墙与加密状态', '输出风险说明与修复建议', '保留回滚思路，适合审慎执行'], examples: ['检查服务器安全配置', '看看 SSH 是否过度开放', '列出需要加固的点'], searchTerms: ['ssh 防火墙 端口 审计 加固 bitlocker filevault 安全'] },
+                { id: 'skill-taskflow', slug: 'taskflow-skill', icon: '🪝', title: '任务流编排', desc: '管理多步骤长流程任务，支持等待、恢复、子任务串联和状态持久化。', tags: ['高级', '工作流'], category: '开发运维', audience: '自动化编排', install: '适合多阶段 Agent 工作流\n可结合定时器、外部事件和子任务\n推荐用于复杂自动化场景', highlights: ['支持中断恢复与等待外部输入', '适合多 Prompt 或多工具链路', '可统一管理父子任务状态'], examples: ['设计一个带等待节点的流程', '串联多个子任务', '恢复中断的自动化执行'], searchTerms: ['workflow taskflow resume waiting child task orchestration'] },
+                { id: 'skill-study-planner', slug: 'study-planner-skill', icon: '📚', title: '学习效率提升', desc: '根据目标与时间生成学习计划，结合费曼学习法和间隔重复安排复习。', tags: ['学习', '记忆法', '新增'], category: '学习教育', audience: '学习规划', install: '不依赖外部服务\n适合考试冲刺、自学与长期成长计划\n可配合 Anki 或 Notion 使用', highlights: ['生成分阶段学习计划', '内置复习节奏与每日模板', '可根据学科调整策略'], examples: ['帮我做 30 天学习计划', '考前 3 天怎么冲刺', '安排一套英语复习节奏'], searchTerms: ['学习 复习 计划 费曼 间隔重复 anki notion 记忆'] },
+                { id: 'skill-smart-quiz', slug: 'smart-quiz-skill', icon: '✏️', title: '智能出题', desc: '按知识点生成选择、填空和简答题，并附带答案与解析。', tags: ['学习', '出题', '新增'], category: '学习教育', audience: '练习生成', install: '适合课堂练习、题库扩展与自测\n可按题型和难度输出\n支持多学科使用', highlights: ['支持多种题型与答案解析', '可生成变式题与易错题', '适合老师备课和学生刷题'], examples: ['围绕牛顿定律出 5 道题', '生成英语语法练习', '做一套带答案的自测题'], searchTerms: ['出题 题库 练习 解析 变式题 易错题 数学 英语'] },
+                { id: 'skill-paper-generator', slug: 'paper-generator-skill', icon: '📋', title: '试卷生成器', desc: '自动生成标准格式试卷，包含题型配置、答案与详细解析。', tags: ['学习', '组卷', '新增'], category: '学习教育', audience: '教研备课', install: '适合随堂测验、月考和模拟卷\n支持控制时长、难度和题量\n输出结构完整', highlights: ['生成试卷与双向细目表', '支持多场景考试模板', '附参考答案和命题说明'], examples: ['做一套 40 分钟单元测试', '生成一份期末模拟卷', '按知识点出综合卷'], searchTerms: ['试卷 组卷 模拟卷 月考 期末 题量 难度 教研'] },
+                { id: 'skill-social-comm', slug: 'social-comm-skill', icon: '💬', title: '社交沟通', desc: '生成高情商回复、道歉和感谢文本，帮你在社交和职场里更从容。', tags: ['社交', '沟通', '新增'], category: '生活助手', audience: '关系维护', install: '适合微信、邮件、职场沟通与轻社交\n可按语气、关系和场景输出不同版本', highlights: ['覆盖道歉、感谢、拒绝与祝福', '提供高情商表达框架', '支持职场与私人场景切换'], examples: ['帮我礼貌拒绝这个邀请', '写一段感谢领导的话', '优化这条回复的语气'], searchTerms: ['沟通 高情商 拒绝 道歉 感谢 祝福 职场 社交'] },
+                { id: 'skill-travel-planner', slug: 'travel-planner-skill', icon: '✈️', title: '旅行规划', desc: '生成完整行程、预算和行李清单，覆盖出发前到返程后的主要安排。', tags: ['旅行', '规划', '新增'], category: '生活助手', audience: '出行助手', install: '适合短途、长途与自由行\n支持每日行程、预算和行李清单输出\n对第一次出行尤其友好', highlights: ['生成按天拆分的旅行计划', '预算、住宿与交通一并考虑', '输出可执行的行李清单'], examples: ['做一个杭州 3 日行程', '预算 3000 的周末旅行', '整理海边旅行清单'], searchTerms: ['旅行 行程 预算 景点 行李 清单 自由行 周末游'] },
+                { id: 'skill-meeting-notes', slug: 'meeting-notes-skill', icon: '📝', title: '会议纪要', desc: '把会议录音或文字记录整理成结构化纪要，自动提炼行动项与负责人。', tags: ['办公', '效率', '新增'], category: '办公效率', audience: '会议整理', install: '适合项目会、周会、客户会与需求评审\n可从录音转写稿或原始文本开始整理', highlights: ['自动提炼议题结论', '生成行动事项列表', '支持负责人和截止时间整理'], examples: ['整理这场需求评审会', '从录音转写稿生成纪要', '提炼下周跟进事项'], searchTerms: ['会议纪要 action item owner due date 录音 转写'] },
+                { id: 'skill-blogwatcher', slug: 'blogwatcher-skill', icon: '📰', title: '博客 / RSS 订阅监控', desc: '订阅博客或 RSS 源，定时检查更新并输出最新文章列表。', tags: ['信息收集', 'RSS'], category: '信息获取', audience: '资讯跟踪', install: '需要 Go 环境\ngo install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest\n适合技术博客和资讯监控', highlights: ['支持 RSS / Atom 订阅', '定时扫描更新并记录已读状态', '可输出 JSON，方便接入其他流程'], examples: ['监控 GitHub Blog 更新', '追踪 AI 新闻源', '搜索已订阅文章里的关键词'], searchTerms: ['rss atom blogwatcher feed github blog ai 订阅 监控'] }
+            ];
+
+            const categoryOrder = ['全部', '办公效率', '开发运维', '信息获取', '学习教育', '生活助手'];
+            const state = { category: '全部', query: '' };
+            let filteredSkills = skills.slice();
+
+            const escapeHtml = (value) => value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const normalize = (value) => value.toLowerCase().trim();
+            const queryTokens = (value) => normalize(value).split(/\s+/).filter(Boolean);
+
+            const searchIndex = (skill) => normalize([
+                skill.title,
+                skill.desc,
+                skill.category,
+                skill.audience,
+                skill.tags.join(' '),
+                skill.highlights.join(' '),
+                skill.examples.join(' '),
+                skill.install,
+                skill.searchTerms.join(' ')
+            ].join(' '));
+
+            const highlight = (text, query) => {
+                const tokens = queryTokens(query);
+                if (!tokens.length) return escapeHtml(text);
+                const pattern = tokens.map(escapeRegex).join('|');
+                return escapeHtml(text).replace(new RegExp(`(${pattern})`, 'gi'), '<mark>$1</mark>');
+            };
+
+            const categoryMatches = (skill) => state.category === '全部' || skill.category === state.category;
+            const searchMatches = (skill) => {
+                const tokens = queryTokens(state.query);
+                if (!tokens.length) return true;
+                const haystack = searchIndex(skill);
+                return tokens.every((token) => haystack.includes(token));
+            };
+
+            const renderResults = () => {
+                const resultsBar = document.getElementById('resultsBar');
+                const emptyState = document.getElementById('emptyState');
+                const clearButton = document.getElementById('clearSearch');
+                if (!resultsBar || !emptyState || !clearButton) return;
+                resultsBar.innerHTML = `
+                    <div class="results-count"><strong>${filteredSkills.length}</strong> / ${skills.length} 个 Skills</div>
+                    <div class="results-query">${state.query ? `关键词：${escapeHtml(state.query)}` : `分类：${state.category}`}</div>
+                `;
+                emptyState.classList.toggle('show', filteredSkills.length === 0);
+                clearButton.classList.toggle('visible', Boolean(state.query));
+            };
+
+            const renderCards = () => {
+                const grid = document.getElementById('skillsGrid');
+                if (!grid) return;
+                grid.innerHTML = filteredSkills.map((skill) => `
+                    <div class="skill-card" id="${skill.id}">
+                        <div class="skill-card-top">
+                            <div class="skill-icon-wrap">${skill.icon}</div>
+                            <span class="skill-downloads">${skill.category}</span>
+                        </div>
+                        <div class="skill-name">${highlight(skill.title, state.query)}</div>
+                        <div class="skill-desc">${highlight(skill.desc, state.query)}</div>
+                        <div class="skill-tags">
+                            ${skill.tags.map((tag) => `<span class="tag ${tag === '热门' || tag === '新增' ? 'tag-accent' : ''}">${highlight(tag, state.query)}</span>`).join('')}
+                        </div>
+                        <div class="skill-footer">
+                            <div class="skill-author">
+                                <div class="skill-author-avatar">S</div>
+                                SkillStack
+                            </div>
+                            <button class="preview-btn" data-preview="${skill.id}">预览</button>
+                            <a href="skills/${skill.slug}.zip" class="download-btn" download>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                下载
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+
+                grid.querySelectorAll('[data-preview]').forEach((button) => {
+                    button.addEventListener('click', () => openModal(button.dataset.preview));
+                });
+            };
+
+            const filterSkills = () => {
+                filteredSkills = skills.filter((skill) => categoryMatches(skill) && searchMatches(skill));
+                renderCards();
+                renderResults();
+            };
+
+            const openModal = (id) => {
+                const skill = skills.find((item) => item.id === id);
+                if (!skill) return;
+                document.getElementById('modal-icon').textContent = skill.icon;
+                document.getElementById('modal-title').textContent = skill.title;
+                document.getElementById('modal-desc').textContent = skill.desc;
+                document.getElementById('modal-tags').innerHTML = skill.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
+                document.getElementById('modal-content').innerHTML = `
+                    <div class="modal-meta">
+                        <div class="modal-meta-card">
+                            <div class="modal-meta-label">分类</div>
+                            <div class="modal-meta-value">${escapeHtml(skill.category)}</div>
+                        </div>
+                        <div class="modal-meta-card">
+                            <div class="modal-meta-label">适用方向</div>
+                            <div class="modal-meta-value">${escapeHtml(skill.audience)}</div>
+                        </div>
+                        <div class="modal-meta-card">
+                            <div class="modal-meta-label">下载包</div>
+                            <div class="modal-meta-value">${escapeHtml(skill.slug)}.zip</div>
+                        </div>
+                    </div>
+                    <h4>预览亮点</h4>
+                    <div class="modal-preview-list">
+                        ${skill.highlights.map((item) => `
+                            <div class="modal-preview-item">
+                                <strong>${escapeHtml(item)}</strong>
+                                <span>${escapeHtml(skill.desc)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <h4>典型用法</h4>
+                    <div class="modal-example-list">
+                        ${skill.examples.map((item, index) => `
+                            <div class="modal-example-item">
+                                <strong>示例 ${index + 1}</strong>
+                                <span>${escapeHtml(item)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <h4>安装提示</h4>
+                    <div class="modal-install">${escapeHtml(skill.install)}</div>
+                `;
+                document.getElementById('modal-download').href = `skills/${skill.slug}.zip`;
+                document.getElementById('modal').classList.add('open');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeModal = () => {
+                document.getElementById('modal').classList.remove('open');
+                document.body.style.overflow = '';
+            };
+
+            const renderCategories = () => {
+                const nav = document.getElementById('categoryNav');
+                if (!nav) return;
+                nav.innerHTML = categoryOrder.map((category) => `
+                    <button class="cat-btn ${category === state.category ? 'active' : ''}" data-category="${category}">${category}</button>
+                `).join('');
+                nav.querySelectorAll('[data-category]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        state.category = button.dataset.category;
+                        renderCategories();
+                        filterSkills();
+                    });
+                });
+            };
+
+            const setupSearch = () => {
+                const wrap = document.getElementById('searchWrap');
+                if (!wrap) return;
+                wrap.innerHTML = `
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInputEnhanced" placeholder="搜索名称、标签、功能、安装方式">
+                    </div>
+                    <div class="search-toolbar">
+                        <div class="search-shortcut"><kbd>/</kbd> 快速聚焦搜索</div>
+                        <button class="clear-search" id="clearSearch" type="button">清空搜索</button>
+                    </div>
+                `;
+
+                const input = document.getElementById('searchInputEnhanced');
+                const clearButton = document.getElementById('clearSearch');
+                if (!input || !clearButton) return;
+
+                input.addEventListener('input', () => {
+                    state.query = input.value;
+                    filterSkills();
+                });
+
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' && filteredSkills.length === 1) {
+                        openModal(filteredSkills[0].id);
+                    }
+                });
+
+                clearButton.addEventListener('click', () => {
+                    input.value = '';
+                    state.query = '';
+                    filterSkills();
+                    input.focus();
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    const targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
+                    const isTyping = targetTag === 'input' || targetTag === 'textarea';
+                    if (event.key === '/' && !isTyping) {
+                        event.preventDefault();
+                        input.focus();
+                    }
+                    if (event.key === 'Escape' && document.getElementById('modal').classList.contains('open')) {
+                        closeModal();
+                    }
+                });
+            };
+
+            const init = () => {
+                const searchWrap = document.querySelector('.search-wrap');
+                const categoryNav = document.querySelector('.category-nav');
+                const skillsGrid = document.querySelector('.skills-grid');
+                if (!searchWrap || !categoryNav || !skillsGrid) return;
+
+                searchWrap.id = 'searchWrap';
+                categoryNav.id = 'categoryNav';
+                skillsGrid.id = 'skillsGrid';
+
+                if (!document.getElementById('resultsBar')) {
+                    const resultsBar = document.createElement('div');
+                    resultsBar.className = 'results-bar';
+                    resultsBar.id = 'resultsBar';
+                    skillsGrid.parentNode.insertBefore(resultsBar, skillsGrid);
+                }
+
+                if (!document.getElementById('emptyState')) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.id = 'emptyState';
+                    emptyState.innerHTML = '<h3>没有找到匹配的 Skill</h3><p>试试更宽泛的关键词，或者切换分类看看。搜索支持名称、标签、功能亮点和安装方式。</p>';
+                    skillsGrid.parentNode.insertBefore(emptyState, skillsGrid.nextSibling);
+                }
+
+                setupSearch();
+                renderCategories();
+                filterSkills();
+
+                const modal = document.getElementById('modal');
+                if (modal) {
+                    modal.addEventListener('click', (event) => {
+                        if (event.target.id === 'modal') closeModal();
+                    });
+                }
+
+                const closeButton = document.querySelector('.modal-close');
+                if (closeButton) closeButton.onclick = closeModal;
+
+                window.openModal = openModal;
+                window.closeModal = closeModal;
+                window.filterSkills = filterSkills;
+                window.setCategory = (category) => {
+                    state.category = category;
+                    renderCategories();
+                    filterSkills();
+                };
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init, { once: true });
+            } else {
+                init();
+            }
+        })();
+    </script>
 </body>
 </html>
