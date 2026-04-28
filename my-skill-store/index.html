@@ -491,11 +491,12 @@
 <body>
     <script>
         const categoryMap = {
-            '全部':      ['skill-weather','skill-summarize','skill-github','skill-email','skill-excel','skill-healthcheck','skill-taskflow','skill-blogwatcher'],
+            '全部':      ['skill-weather','skill-summarize','skill-github','skill-email','skill-excel','skill-healthcheck','skill-taskflow','skill-blogwatcher','skill-study-planner','skill-smart-quiz','skill-paper-generator'],
             '🔥 热门':  ['skill-weather','skill-summarize','skill-github'],
             '💼 办公':  ['skill-email','skill-excel'],
             '🔧 系统':  ['skill-healthcheck','skill-taskflow','skill-blogwatcher'],
-            '⚡ 效率':  ['skill-summarize','skill-excel']
+            '⚡ 效率':  ['skill-summarize','skill-excel'],
+            '📖 学习':  ['skill-study-planner','skill-smart-quiz','skill-paper-generator']
         };
 
         function setCategory(cat) {
@@ -556,7 +557,7 @@
     <div class="stats-bar">
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-num">8</div>
+                <div class="stat-num">11</div>
                 <div class="stat-label">精选 Skills</div>
             </div>
             <div class="stat-item">
@@ -589,6 +590,7 @@
                 <button class="cat-btn">💼 办公</button>
                 <button class="cat-btn">🔧 系统</button>
                 <button class="cat-btn">⚡ 效率</button>
+                <button class="cat-btn">📖 学习</button>
             </div>
 
             <div class="skills-grid">
@@ -758,6 +760,81 @@
                             SkillStack
                         </div>
                         <a href="skills/taskflow-skill.zip" class="download-btn" download>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            下载
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Study Planner -->
+                <div class="skill-card" id="skill-study-planner">
+                    <div class="skill-card-top">
+                        <div class="skill-icon-wrap">📚</div>
+                        <span class="skill-downloads"></span>
+                    </div>
+                    <div class="skill-name">学习效率提升</div>
+                    <div class="skill-desc">制定个性化学习计划，运用费曼学习法、间隔重复等科学方法，提升记忆效率。</div>
+                    <div class="skill-tags">
+                        <span class="tag">学习</span>
+                        <span class="tag">记忆法</span>
+                        <span class="tag tag-accent">新增</span>
+                    </div>
+                    <div class="skill-footer">
+                        <div class="skill-author">
+                            <div class="skill-author-avatar">S</div>
+                            SkillStack
+                        </div>
+                        <a href="skills/study-planner-skill.zip" class="download-btn" download>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            下载
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Smart Quiz -->
+                <div class="skill-card" id="skill-smart-quiz">
+                    <div class="skill-card-top">
+                        <div class="skill-icon-wrap">✏️</div>
+                        <span class="skill-downloads"></span>
+                    </div>
+                    <div class="skill-name">智能出题</div>
+                    <div class="skill-desc">根据知识点生成选择题、填空题、简答题，自动附带答案和详细解析。</div>
+                    <div class="skill-tags">
+                        <span class="tag">学习</span>
+                        <span class="tag">出题</span>
+                        <span class="tag tag-accent">新增</span>
+                    </div>
+                    <div class="skill-footer">
+                        <div class="skill-author">
+                            <div class="skill-author-avatar">S</div>
+                            SkillStack
+                        </div>
+                        <a href="skills/smart-quiz-skill.zip" class="download-btn" download>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            下载
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Paper Generator -->
+                <div class="skill-card" id="skill-paper-generator">
+                    <div class="skill-card-top">
+                        <div class="skill-icon-wrap">📋</div>
+                        <span class="skill-downloads"></span>
+                    </div>
+                    <div class="skill-name">试卷生成器</div>
+                    <div class="skill-desc">自动生成标准格式试卷，包含双向细目表、多种题型、参考答案和详细解析。</div>
+                    <div class="skill-tags">
+                        <span class="tag">学习</span>
+                        <span class="tag">组卷</span>
+                        <span class="tag tag-accent">新增</span>
+                    </div>
+                    <div class="skill-footer">
+                        <div class="skill-author">
+                            <div class="skill-author-avatar">S</div>
+                            SkillStack
+                        </div>
+                        <a href="skills/paper-generator-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
                         </a>
