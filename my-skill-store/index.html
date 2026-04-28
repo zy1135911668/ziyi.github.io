@@ -593,6 +593,7 @@
         .search-wrap {
             max-width: 480px;
             margin: 0 auto 48px;
+            position: relative;
         }
         .search-box {
             display: flex;
@@ -616,7 +617,27 @@
             color: var(--text-primary);
         }
         .search-box input::placeholder { color: var(--text-muted); }
-        .search-icon { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
+        .search-icon {
+            color: var(--text-muted);
+            font-size: 16px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+        button.search-icon {
+            cursor: pointer;
+        }
+        button.search-icon:hover,
+        button.search-icon:focus-visible {
+            background: var(--accent-light);
+            color: var(--accent);
+            outline: none;
+        }
 
         /* Hero mini stats */
         .hero-stats {
@@ -658,6 +679,73 @@
             display: none;
         }
         .clear-search.visible { display: inline-flex; }
+        .search-suggestions {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow-lg);
+            padding: 12px;
+            text-align: left;
+            z-index: 20;
+        }
+        .search-suggestions.show { display: block; }
+        .search-suggestions-title {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2px 4px 8px;
+        }
+        .suggestion-list {
+            display: grid;
+            gap: 8px;
+        }
+        .suggestion-item {
+            width: 100%;
+            text-align: left;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: all 0.15s;
+        }
+        .suggestion-item:hover,
+        .suggestion-item:focus-visible {
+            background: var(--accent-light);
+            border-color: #dde1fb;
+            outline: none;
+        }
+        .suggestion-main {
+            display: grid;
+            gap: 3px;
+        }
+        .suggestion-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .suggestion-meta {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+        .suggestion-pill {
+            flex-shrink: 0;
+            font-size: 0.72rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: white;
+            color: var(--accent);
+            border: 1px solid #dde1fb;
+        }
         .results-bar {
             display: flex;
             align-items: center;
@@ -1527,6 +1615,12 @@
                 'excel': ['表格', 'csv', '数据分析'],
                 'github': ['代码托管', 'pr', 'issue', '仓库']
             };
+            const suggestionSeeds = [
+                { label: '旅游', type: '关键词', query: '旅游', meta: '会联想到旅行规划、出行与行程' },
+                { label: '会议纪要', type: 'Skill', query: '会议纪要', meta: '整理会议内容和行动项' },
+                { label: 'RSS 订阅', type: '关键词', query: 'rss', meta: '订阅博客与资讯源更新' },
+                { label: 'GitHub', type: '关键词', query: 'github', meta: 'PR、Issue、CI 管理' }
+            ];
 
             const escapeHtml = (value) => value
                 .replace(/&/g, '&amp;')
@@ -1579,6 +1673,116 @@
                 clearButton.classList.toggle('visible', Boolean(state.query));
             };
 
+            const activateSearch = () => {
+                const input = document.getElementById('searchInputEnhanced');
+                const skillsSection = document.getElementById('skills');
+                if (!input) return;
+                input.focus();
+                if (state.query.trim()) {
+                    filterSkills();
+                    if (skillsSection) {
+                        skillsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            };
+
+            const buildSuggestions = () => {
+                const suggestions = [];
+                const query = state.query.trim();
+                const normalizedQuery = normalize(query);
+                const tokens = queryTokens(query);
+
+                if (!query) {
+                    suggestions.push(...suggestionSeeds);
+                } else {
+                    tokens.forEach((token) => {
+                        tokenVariants(token)
+                            .filter((variant) => variant !== token)
+                            .slice(0, 3)
+                            .forEach((variant) => {
+                                suggestions.push({
+                                    label: variant,
+                                    type: '同义词',
+                                    query: variant,
+                                    meta: `试试用“${variant}”继续搜`
+                                });
+                            });
+                    });
+
+                    skills
+                        .filter((skill) => searchMatches(skill))
+                        .slice(0, 4)
+                        .forEach((skill) => {
+                            suggestions.push({
+                                label: skill.title,
+                                type: 'Skill',
+                                query: skill.title,
+                                previewId: skill.id,
+                                meta: `${skill.category} · ${skill.desc}`
+                            });
+                        });
+
+                    if (!suggestions.length && normalizedQuery) {
+                        suggestions.push({
+                            label: `${query} 相关`,
+                            type: '关键词',
+                            query,
+                            meta: '当前没有直接结果，点击后保留这个词继续搜索'
+                        });
+                    }
+                }
+
+                const seen = new Set();
+                return suggestions.filter((item) => {
+                    const key = `${item.type}:${item.label}:${item.query}`;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                }).slice(0, 6);
+            };
+
+            const renderSuggestions = () => {
+                const panel = document.getElementById('searchSuggestions');
+                if (!panel) return;
+                const suggestions = buildSuggestions();
+                if (!suggestions.length) {
+                    panel.classList.remove('show');
+                    panel.innerHTML = '';
+                    return;
+                }
+
+                panel.innerHTML = `
+                    <div class="search-suggestions-title">搜索建议</div>
+                    <div class="suggestion-list">
+                        ${suggestions.map((item, index) => `
+                            <button class="suggestion-item" type="button" data-suggestion="${escapeHtml(item.query)}" ${item.previewId ? `data-preview-open="${item.previewId}"` : ''}>
+                                <span class="suggestion-main">
+                                    <span class="suggestion-label">${escapeHtml(item.label)}</span>
+                                    <span class="suggestion-meta">${escapeHtml(item.meta)}</span>
+                                </span>
+                                <span class="suggestion-pill">${escapeHtml(item.type)}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                panel.classList.add('show');
+
+                panel.querySelectorAll('[data-suggestion]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const input = document.getElementById('searchInputEnhanced');
+                        if (!input) return;
+                        input.value = button.dataset.suggestion;
+                        state.query = button.dataset.suggestion;
+                        filterSkills();
+                        activateSearch();
+                        panel.classList.remove('show');
+                        if (button.dataset.previewOpen && filteredSkills.length === 1) {
+                            openModal(button.dataset.previewOpen);
+                        }
+                    });
+                });
+            };
+
             const renderCards = () => {
                 const grid = document.getElementById('skillsGrid');
                 if (!grid) return;
@@ -1616,6 +1820,7 @@
                 filteredSkills = skills.filter((skill) => categoryMatches(skill) && searchMatches(skill));
                 renderCards();
                 renderResults();
+                renderSuggestions();
             };
 
             const openModal = (id) => {
@@ -1691,9 +1896,10 @@
                 if (!wrap) return;
                 wrap.innerHTML = `
                     <div class="search-box">
-                        <span class="search-icon">🔍</span>
+                        <button class="search-icon" id="searchAction" type="button" aria-label="执行搜索" title="点击搜索并定位到技能列表">🔍</button>
                         <input type="text" id="searchInputEnhanced" placeholder="搜索名称、标签、功能、安装方式">
                     </div>
+                    <div class="search-suggestions" id="searchSuggestions"></div>
                     <div class="search-toolbar">
                         <div class="search-shortcut"><kbd>/</kbd> 快速聚焦搜索</div>
                         <button class="clear-search" id="clearSearch" type="button">清空搜索</button>
@@ -1702,18 +1908,28 @@
 
                 const input = document.getElementById('searchInputEnhanced');
                 const clearButton = document.getElementById('clearSearch');
-                if (!input || !clearButton) return;
+                const searchAction = document.getElementById('searchAction');
+                if (!input || !clearButton || !searchAction) return;
 
                 input.addEventListener('input', () => {
                     state.query = input.value;
                     filterSkills();
                 });
 
+                input.addEventListener('focus', () => {
+                    renderSuggestions();
+                });
+
                 input.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' && filteredSkills.length === 1) {
-                        openModal(filteredSkills[0].id);
+                    if (event.key === 'Enter') {
+                        activateSearch();
+                        if (filteredSkills.length === 1) {
+                            openModal(filteredSkills[0].id);
+                        }
                     }
                 });
+
+                searchAction.addEventListener('click', activateSearch);
 
                 clearButton.addEventListener('click', () => {
                     input.value = '';
@@ -1731,6 +1947,14 @@
                     }
                     if (event.key === 'Escape' && document.getElementById('modal').classList.contains('open')) {
                         closeModal();
+                    }
+                });
+
+                document.addEventListener('click', (event) => {
+                    const panel = document.getElementById('searchSuggestions');
+                    if (!panel) return;
+                    if (!wrap.contains(event.target)) {
+                        panel.classList.remove('show');
                     }
                 });
             };
