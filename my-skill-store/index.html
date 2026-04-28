@@ -1510,6 +1510,24 @@
             const state = { category: '全部', query: '' };
             let filteredSkills = skills.slice();
 
+            const searchAliases = {
+                '旅游': ['旅行', '出行', '行程', '自由行'],
+                '旅行': ['旅游', '出行', '行程', '自由行'],
+                '出行': ['旅行', '旅游', '行程'],
+                '开会': ['会议', '纪要', '会议纪要'],
+                '会议': ['开会', '纪要', '会议纪要'],
+                '纪要': ['会议', '开会', '会议纪要'],
+                '订阅': ['rss', '博客', '监控'],
+                'rss': ['订阅', '博客', '信息源'],
+                '总结': ['摘要', '概括', '提炼'],
+                '摘要': ['总结', '概括', '提炼'],
+                '试卷': ['组卷', '考试', '测验'],
+                '组卷': ['试卷', '考试', '测验'],
+                '邮件': ['邮箱', 'smtp', '发信'],
+                'excel': ['表格', 'csv', '数据分析'],
+                'github': ['代码托管', 'pr', 'issue', '仓库']
+            };
+
             const escapeHtml = (value) => value
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -1519,6 +1537,7 @@
             const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const normalize = (value) => value.toLowerCase().trim();
             const queryTokens = (value) => normalize(value).split(/\s+/).filter(Boolean);
+            const tokenVariants = (token) => [token, ...(searchAliases[token] || [])];
 
             const searchIndex = (skill) => normalize([
                 skill.title,
@@ -1544,7 +1563,7 @@
                 const tokens = queryTokens(state.query);
                 if (!tokens.length) return true;
                 const haystack = searchIndex(skill);
-                return tokens.every((token) => haystack.includes(token));
+                return tokens.every((token) => tokenVariants(token).some((variant) => haystack.includes(variant)));
             };
 
             const renderResults = () => {
