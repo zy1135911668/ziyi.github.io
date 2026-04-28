@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillStack · AI Agent 扩展市场</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -68,15 +69,15 @@
             color: var(--text-primary);
         }
         .nav-logo-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            width: 32px;
+            height: 32px;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
+            overflow: hidden;
+        }
+        .nav-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .nav-links {
             display: flex;
@@ -361,6 +362,21 @@
         }
         .download-btn svg { width: 13px; height: 13px; }
 
+        /* Preview button */
+        .preview-btn {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .preview-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
         /* Category nav */
         .category-nav {
             display: flex;
@@ -486,9 +502,160 @@
             .nav-links { display: none; }
             .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
         }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 680px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            padding: 28px 32px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+        .modal-icon { font-size: 40px; }
+        .modal-title-wrap { flex: 1; }
+        .modal-title { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); }
+        .modal-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .modal-close {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+        .modal-close:hover { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+        .modal-body { padding: 28px 32px; }
+        .modal-section-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+        .modal-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; }
+        .modal-content-inner { font-size: 0.85rem; color: var(--text-primary); line-height: 1.8; }
+        .modal-content-inner h4 { font-size: 0.95rem; font-weight: 700; margin: 16px 0 8px; color: var(--text-primary); }
+        .modal-content-inner ul { padding-left: 20px; }
+        .modal-content-inner li { margin-bottom: 6px; }
+        .modal-footer {
+            padding: 20px 32px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+        .modal-download {
+            flex: 1;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+        .modal-download:hover { background: var(--accent-hover); }
+        .modal-footer .tag { font-size: 0.7rem; }
+
+        /* Search */
+        .search-wrap {
+            max-width: 480px;
+            margin: 0 auto 48px;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 0 16px;
+            gap: 10px;
+            transition: border-color 0.2s;
+        }
+        .search-box:focus-within { border-color: var(--accent); }
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: transparent;
+            color: var(--text-primary);
+        }
+        .search-box input::placeholder { color: var(--text-muted); }
+        .search-icon { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
+
+        /* Hero mini stats */
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+        .hero-stat { font-size: 0.85rem; color: var(--text-secondary); }
+        .hero-stat strong { color: var(--accent); font-weight: 700; }
     </style>
 </head>
 <body>
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-icon" id="modal-icon">📦</div>
+                <div class="modal-title-wrap">
+                    <div class="modal-title" id="modal-title">Skill Name</div>
+                    <div class="modal-tags" id="modal-tags"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section-title">功能描述</div>
+                <div class="modal-desc" id="modal-desc"></div>
+                <div class="modal-section-title">详细内容</div>
+                <div class="modal-content-inner" id="modal-content"></div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-download" id="modal-download" download>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载 SKILL.md
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
         const categoryMap = {
             '全部':      ['skill-weather','skill-summarize','skill-github','skill-email','skill-excel','skill-healthcheck','skill-taskflow','skill-blogwatcher','skill-study-planner','skill-smart-quiz','skill-paper-generator','skill-social-comm','skill-travel-planner','skill-meeting-notes'],
@@ -518,6 +685,129 @@
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.addEventListener('click', () => setCategory(btn.textContent.trim()));
             });
+
+            // Skill preview data
+            const skillData = {
+                'skill-weather': {
+                    icon: '🌦️', title: '天气查询',
+                    tags: ['热门', '工具类', '日常生活'],
+                    desc: '输入城市名，返回实时天气、PM2.5、穿衣指数。适用于出差、旅行规划助手。无需 API Key，直接调用 wttr.in。',
+                    content: '<h4>功能亮点</h4><ul><li>支持全球城市和机场代码</li><li>输出格式化：单行、详细、JSON、PNG图片</li><li>无需注册，即装即用</li></ul><h4>使用示例</h4><ul><li>「北京天气怎么样？」</li><li>「明天会下雨吗？」</li><li>「这周天气预报」</li></ul><h4>输出格式</h4><ul><li>单行摘要：城市 + 天气图标 + 温度</li><li>详细模式：含湿度、风速，体感温度</li><li>PNG图片：直接生成天气图</li></ul>'
+                },
+                'skill-summarize': {
+                    icon: '🧾', title: '文章 / 视频摘要',
+                    tags: ['热门', 'AI 能力', '信息处理'],
+                    desc: '输入网址，自动总结网页要点、YouTube 视频字幕、PDF 内容提取。',
+                    content: '<h4>支持类型</h4><ul><li>任意网页URL</li><li>YouTube / Bilibili 视频（自动提取字幕）</li><li>本地 PDF 文件</li><li>播客音频</li></ul><h4>输出长度</h4><ul><li>short / medium / long / xxl</li><li>可指定字符数：--length 500</li></ul><h4>特色功能</h4><ul><li>--extract-only：只提取不摘要，适合长视频</li><li>--json：程序化输出</li><li>自动语言检测，中英文均支持</li></ul>'
+                },
+                'skill-github': {
+                    icon: '🐙', title: 'GitHub 管理',
+                    tags: ['热门', '开发者', '代码管理'],
+                    desc: '用 gh CLI 管理 Issues、PR、CI 状态。查进度、合并代码、查看日志。',
+                    content: '<h4>支持操作</h4><ul><li>PR：查看状态、CI检查、合并、创建</li><li>Issues：创建、关闭、列清单</li><li>CI：查看运行日志、重新运行失败任务</li><li>API：自定义 GraphQL 查询</li></ul><h4>常用命令</h4><ul><li>gh pr list --repo owner/repo</li><li>gh issue create --title "Bug"</li><li>gh run view &lt;id&gt; --log-failed</li></ul><h4>注意</h4><ul><li>需要在 GitHub 上完成 gh auth login</li><li>支持 SSH 和 HTTPS 两种认证方式</li></ul>'
+                },
+                'skill-email': {
+                    icon: '📧', title: '邮件发送',
+                    tags: ['办公自动化', 'SMTP'],
+                    desc: 'SMTP 协议自动发送邮件，支持附件、Gmail / QQ / 企业邮箱。日报周报神器。',
+                    content: '<h4>支持邮箱</h4><ul><li>Gmail（需要应用专用密码）</li><li>QQ 邮箱</li><li>企业邮箱（任何支持 SMTP 的邮箱）</li></ul><h4>功能</h4><ul><li>发送纯文本 / HTML 邮件</li><li>支持多个收件人</li><li>带附件（PDF、图片、文档等）</li><li>可配置发件人显示名</li></ul><h4>安全提示</h4><ul><li>密码使用「授权码」而非登录密码</li><li>建议开启两步验证</li></ul>'
+                },
+                'skill-excel': {
+                    icon: '📊', title: 'Excel 数据分析',
+                    tags: ['数据分析', '办公自动化'],
+                    desc: '上传 Excel / CSV，自动计算关键指标、生成图表、输出数据摘要报告。',
+                    content: '<h4>分析能力</h4><ul><li>自动读取 Excel / CSV 文件</li><li>关键指标：总和、平均、中位数、标准差</li><li>分组汇总：按部门/月份/分类统计</li><li>数据筛选：按条件过滤行</li></ul><h4>可视化</h4><ul><li>柱状图、折线图、饼图</li><li>自动保存为 PNG</li><li>支持中文标签</li></ul><h4>依赖</h4><ul><li>Python 3 + pandas + openpyxl + matplotlib</li></ul>'
+                },
+                'skill-healthcheck': {
+                    icon: '🔒', title: '系统安全审计',
+                    tags: ['安全', '服务器'],
+                    desc: '检查 SSH、防火墙、端口暴露、自动更新、磁盘加密，发现风险并给出加固方案。',
+                    content: '<h4>检查范围</h4><ul><li>SSH 配置：是否允许密码登录、root 登录</li><li>防火墙状态：端口是否过度暴露</li><li>系统更新：自动安全更新是否开启</li><li>磁盘加密：FileVault / BitLocker 状态</li><li>备份系统：是否有定期备份</li></ul><h4>输出内容</h4><ul><li>当前安全状况报告</li><li>与目标配置的差距</li><li>每一步修复命令</li><li>回滚方案</li></ul><h4>注意</h4><ul><li>所有修改操作需用户确认才会执行</li><li>修改前建议备份配置文件</li></ul>'
+                },
+                'skill-taskflow': {
+                    icon: '🪝', title: '任务流编排',
+                    tags: ['高级', '工作流'],
+                    desc: '编排多步骤复杂任务，支持中断恢复、子任务关联、状态持久化。',
+                    content: '<h4>适用场景</h4><ul><li>多步骤后台任务（跨多个 prompt）</li><li>需要等待外部响应的工作流</li><li>需要中断恢复的长任务</li><li>需要统一管理的父子任务</li></ul><h4>生命周期</h4><ul><li>createManaged → 创建任务流</li><li>runTask → 启动子任务</li><li>setWaiting → 等待外部事件</li><li>resume → 继续执行</li><li>finish / fail → 结束</li></ul><h4>优势</h4><ul><li>状态持久化，重启后可以继续</li><li>有完整的任务视图可检查进度</li></ul>'
+                },
+                'skill-blogwatcher': {
+                    icon: '📰', title: '博客 / RSS 订阅监控',
+                    tags: ['信息收集', 'RSS'],
+                    desc: '追踪感兴趣的博客和 RSS 订阅源，发现更新时提醒。比刷社交媒体更高效。',
+                    content: '<h4>功能</h4><ul><li>添加 RSS / Atom 订阅源</li><li>定时扫描检查更新</li><li>记录已读/未读状态</li><li>输出 JSON 格式供程序使用</li></ul><h4>订阅源格式</h4><ul><li>GitHub Blog: https://github.com/blog/feed</li><li>Hacker News: https://hnrss.org/frontpage</li><li>任意 RSS / Atom 源</li></ul><h4>安装</h4><ul><li>需要 Go 语言环境</li><li>go install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest</li></ul>'
+                },
+                'skill-study-planner': {
+                    icon: '📚', title: '学习效率提升',
+                    tags: ['学习', '记忆法'],
+                    desc: '制定个性化学习计划，运用费曼学习法、间隔重复等科学方法，提升记忆效率。',
+                    content: '<h4>核心方法</h4><ul><li>费曼学习法：学会用一个概念，教给8岁小孩</li><li>间隔重复：根据遗忘曲线安排复习节奏</li><li>错题本管理：记录错因、关联知识点、复习时间</li></ul><h4>功能</h4><ul><li>生成三阶段学习计划（打基础→强化→冲刺）</li><li>每日学习模板（上午/下午/晚上）</li><li>考前3天冲刺策略</li><li>不同科目（文/理/编程）不同策略</li></ul><h4>工具推荐</h4><ul><li>Anki（间隔重复记忆）</li><li>幕布/Notion（知识整理）</li><li>番茄钟（专注训练）</li></ul>'
+                },
+                'skill-smart-quiz': {
+                    icon: '✏️', title: '智能出题',
+                    tags: ['学习', '出题'],
+                    desc: '根据知识点生成选择题、填空题、简答题，自动附带答案和详细解析。',
+                    content: '<h4>支持题型</h4><ul><li>选择题（4选项，含解析）</li><li>填空题（1-3空）</li><li>简答题（含步骤和考点）</li></ul><h4>出题原则</h4><ul><li>选项有干扰性，不是明显错误</li><li>答案唯一，避免歧义</li><li>解答题步骤完整，不跳步</li></ul><h4>智能扩展</h4><ul><li>变式题：一道母题生成多个变式</li><li>易错题：针对常见错误点出题</li></ul><h4>科目支持</h4><ul><li>数学：概念题/计算题/证明题/应用题</li><li>英语：词汇/语法/阅读/写作</li><li>物理/化学：实验题/计算题/分析题</li></ul>'
+                },
+                'skill-paper-generator': {
+                    icon: '📋', title: '试卷生成器',
+                    tags: ['学习', '组卷'],
+                    desc: '自动生成标准格式试卷，包含双向细目表、多种题型、参考答案和详细解析。',
+                    content: '<h4>输出内容</h4><ul><li>双向细目表（知识点 × 难度）</li><li>完整试卷（选择/填空/解答）</li><li>参考答案 + 详细解析</li><li>命题说明（重难点/易错点）</li></ul><h4>支持考试类型</h4><ul><li>随堂测验（20分钟小题量）</li><li>月考/期中（90分钟标准卷）</li><li>期末/模拟（120分钟大卷）</li></ul><h4>语数英特殊支持</h4><ul><li>数学：计算量控制，压轴题梯度设计</li><li>英语：阅读体裁多样化，作文给要点提示</li><li>语文：古诗词给语境，作文可写性保障</li></ul>'
+                },
+                'skill-social-comm': {
+                    icon: '💬', title: '社交沟通',
+                    tags: ['社交', '沟通'],
+                    desc: '高情商回复建议，生成道歉、感谢、祝福等社交消息，化解尴尬场景。',
+                    content: '<h4>场景覆盖</h4><ul><li>消息回复建议（亲友/同事/领导/客户）</li><li>道歉模板（轻/中/重三档）</li><li>祝福语生成（节日/生日/职场）</li><li>拒绝技巧（真诚+替代方案）</li><li>面谈沟通（开口表达不同意见）</li></ul><h4>回复公式</h4><ul><li>高情商 = 情绪认同 + 具体回应 + 开放延伸</li><li>发消息前自检：对方感受/时间场合/截图会不会尴尬</li></ul><h4>适用人群</h4><ul><li>职场新人不知道怎么跟领导说话</li><li>不知道怎么拒绝又不伤感情</li><li>写不好道歉邮件/感谢信</li></ul>'
+                },
+                'skill-travel-planner': {
+                    icon: '✈️', title: '旅行规划',
+                    tags: ['旅行', '规划'],
+                    desc: '制定完整行程、推荐景点、估算预算、生成行李清单，覆盖出行全流程。',
+                    content: '<h4>功能模块</h4><ul><li>行程规划：每日时间表 + 景点推荐</li><li>预算估算：交通/住宿/餐饮/门票/购物</li><li>行李清单：按类型分类，可按出行方式增减</li><li>实用攻略：交通避坑/美食避坑/拍照技巧</li></ul><h4>行程模板</h4><ul><li>第1天：抵达+休整</li><li>中间几天：主景点+特色体验</li><li>最后1天：轻松+购物+返程</li></ul><h4>预算框架</h4><ul><li>交通30% / 住宿25% / 餐饮20% / 门票15% / 购物10%</li></ul>'
+                },
+                'skill-meeting-notes': {
+                    icon: '📝', title: '会议纪要',
+                    tags: ['办公', '效率'],
+                    desc: '整理会议录音或文字，自动生成结构化纪要，提炼要点、行动事项和负责人。',
+                    content: '<h4>输入格式</h4><ul><li>录音文件（先转文字）</li><li>原始文字记录（聊天截图/语音转文字）</li><li>凭记忆描述会议内容</li></ul><h4>输出内容</h4><ul><li>会议背景与目标</li><li>讨论要点（每个议题的结论）</li><li>行动事项表（含负责人+截止时间+状态）</li><li>下次会议安排</li></ul><h4>常见模板</h4><ul><li>项目启动会</li><li>周例会/例行同步</li><li>需求评审会</li><li>客户/外部会议</li></ul><h4>优先级判断</h4><ul><li>P0：紧急重要（客户明确要求）</li><li>P1：重要不紧急</li><li>P2：可延后</li></ul>'
+                }
+            };
+
+            function openModal(id) {
+                const data = skillData[id];
+                if (!data) return;
+                document.getElementById('modal-icon').textContent = data.icon;
+                document.getElementById('modal-title').textContent = data.title;
+                document.getElementById('modal-desc').textContent = data.desc;
+                document.getElementById('modal-content').innerHTML = data.content;
+                const tagsEl = document.getElementById('modal-tags');
+                tagsEl.innerHTML = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                const downloadLink = document.getElementById('modal-download');
+                downloadLink.href = `skills/${id.replace('skill-','')}-skill.zip`;
+                document.getElementById('modal').classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                document.getElementById('modal').classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal')) closeModal();
+            });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+            function filterSkills() {
+                const q = document.getElementById('searchInput').value.trim().toLowerCase();
+                document.querySelectorAll('.skill-card').forEach(card => {
+                    const name = card.querySelector('.skill-name').textContent.toLowerCase();
+                    const desc = card.querySelector('.skill-desc').textContent.toLowerCase();
+                    const visible = !q || name.includes(q) || desc.includes(q);
+                    card.style.display = visible ? '' : 'none';
+                });
+            }
         });
     </script>
 
@@ -525,7 +815,7 @@
     <div class="nav">
         <div class="nav-inner">
             <a href="#" class="nav-logo">
-                <div class="nav-logo-icon">S</div>
+                <div class="nav-logo-icon"><img src="logo.svg" alt="SkillStack"></div>
                 SkillStack
             </a>
             <div class="nav-links">
@@ -547,6 +837,17 @@
         <p class="hero-sub">
             开源、社区驱动的 AI Agent 扩展市场。精选高质量 Skills，开箱即用，让 AI Agent 完成更多任务。
         </p>
+        <div class="hero-stats">
+            <span class="hero-stat"><strong>14</strong> 精选 Skills</span>
+            <span class="hero-stat"><strong>3,842</strong> 次下载</span>
+            <span class="hero-stat"><strong>4.9</strong> 平均评分</span>
+        </div>
+        <div class="search-wrap">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="搜索 Skills..." oninput="filterSkills()">
+            </div>
+        </div>
         <div class="hero-actions">
             <a href="#skills" class="btn-primary">
                 浏览 Skills
@@ -619,6 +920,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-weather')">预览</button>
                         <a href="skills/weather-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -644,6 +946,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-summarize')">预览</button>
                         <a href="skills/summarize-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -669,6 +972,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-github')">预览</button>
                         <a href="skills/github-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -693,6 +997,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-email')">预览</button>
                         <a href="skills/email-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -717,6 +1022,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-excel')">预览</button>
                         <a href="skills/excel-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -741,6 +1047,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-healthcheck')">预览</button>
                         <a href="skills/healthcheck-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -765,6 +1072,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-taskflow')">预览</button>
                         <a href="skills/taskflow-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -790,6 +1098,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-study-planner')">预览</button>
                         <a href="skills/study-planner-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -815,6 +1124,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-smart-quiz')">预览</button>
                         <a href="skills/smart-quiz-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -840,6 +1150,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-paper-generator')">预览</button>
                         <a href="skills/paper-generator-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -865,6 +1176,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-social-comm')">预览</button>
                         <a href="skills/social-comm-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -890,6 +1202,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-travel-planner')">预览</button>
                         <a href="skills/travel-planner-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -915,6 +1228,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-meeting-notes')">预览</button>
                         <a href="skills/meeting-notes-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
@@ -939,6 +1253,7 @@
                             <div class="skill-author-avatar">S</div>
                             SkillStack
                         </div>
+                        <button class="preview-btn" onclick="openModal('skill-blogwatcher')">预览</button>
                         <a href="skills/blogwatcher-skill.zip" class="download-btn" download>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             下载
