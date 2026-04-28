@@ -3,66 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的 Skill 商店</title>
+    <title>My Skill Store</title>
     <style>
-        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f5f7; color: #1d1d1f; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        h1 { text-align: center; margin: 40px 0 20px; font-size: 2.5rem; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(0, 180, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(120, 0, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(0, 255, 150, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0, 180, 255, 0.15), rgba(120, 0, 255, 0.15));
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            color: #00b4ff;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #00b4ff 50%, #8000ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #888;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .hero-line {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #00b4ff, #8000ff);
+            margin: 30px auto 0;
+            border-radius: 2px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 50px 0;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00b4ff, #00ff96);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-label { font-size: 0.8rem; color: #666; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 50px 0 20px;
+            padding-left: 8px;
+            border-left: 3px solid #00b4ff;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
         .skill-card {
-            background: white; border-radius: 18px; padding: 24px;
-            margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            display: flex; align-items: center; gap: 20px;
-            transition: transform 0.2s;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .skill-card:hover { transform: translateY(-2px); }
-        .skill-icon { font-size: 40px; width: 60px; text-align: center; }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 180, 255, 0.03), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .skill-card:hover {
+            border-color: rgba(0, 180, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 180, 255, 0.1);
+        }
+
+        .skill-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .skill-icon {
+            font-size: 32px;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0,180,255,0.1), rgba(120,0,255,0.1));
+            border-radius: 12px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 180, 255, 0.2);
+        }
+
         .skill-info { flex: 1; }
-        .skill-info h3 { margin-bottom: 8px; font-size: 1.3rem; }
-        .skill-info p { color: #555; line-height: 1.5; }
-        .download-btn {
-            background: #0071e3; color: white; border: none;
-            padding: 10px 20px; border-radius: 20px;
-            font-size: 0.9rem; cursor: pointer;
-            text-decoration: none; display: inline-block;
-            transition: background 0.3s;
+        .skill-info h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
         }
-        .download-btn:hover { background: #005bb5; }
-        .footer { text-align: center; margin: 40px 0; color: #999; font-size: 0.9rem; }
+        .skill-info p { color: #777; font-size: 0.85rem; line-height: 1.5; }
+
+        .skill-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+        .tag {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 8px;
+            background: rgba(0, 180, 255, 0.1);
+            color: #00b4ff;
+            border: 1px solid rgba(0, 180, 255, 0.2);
+        }
+        .tag.tag-hot {
+            background: rgba(255, 100, 50, 0.1);
+            color: #ff6432;
+            border-color: rgba(255, 100, 50, 0.2);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #00b4ff, #0066ff);
+            color: white;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #00d4ff, #0088ff);
+            box-shadow: 0 4px 20px rgba(0, 180, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .download-btn svg { width: 13px; height: 13px; }
+
+        .coming-soon {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.15);
+            color: #555;
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0 50px;
+            color: #444;
+            font-size: 0.8rem;
+        }
+        .footer a { color: #00b4ff; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0f; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2rem; }
+            .stats { gap: 30px; }
+            .skill-card { flex-direction: column; text-align: center; }
+            .skill-tags { justify-content: center; }
+            .download-btn, .coming-soon { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧰 我的 Skill 商店</h1>
-        <p class="subtitle">为你的 AI Agent 添加超能力</p>
+        <div class="hero">
+            <div class="hero-badge">⚡ AI Agent 扩展市场</div>
+            <h1>My Skill Store</h1>
+            <p>为你的 AI Agent 注入超能力<br>开源 · 免费 · 即插即用</p>
+            <div class="hero-line"></div>
+        </div>
 
-        <div class="skill-card">
-            <div class="skill-icon">🌦️</div>
-            <div class="skill-info">
-                <h3>天气查询</h3>
-                <p>输入城市名，返回实时天气。适用于出差、旅行提醒助手。</p>
-                <a href="skills/weather-skill.zip" class="download-btn">下载提示词</a>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-num">7</div>
+                <div class="stat-label">精选 Skills</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">免费使用</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">开源</div>
+                <div class="stat-label">社区共建</div>
             </div>
         </div>
 
-        <div class="skill-card">
-            <div class="skill-icon">📧</div>
-            <div class="skill-info">
-                <h3>邮件发送</h3>
-                <p>通过 SMTP 自动发送邮件，支持附件，可用于日报、通知 Agent。</p>
-                <a href="skills/email-skill.zip" class="download-btn">下载提示词</a>
+        <div class="section-title">🔥 热门工具</div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">🌦️</div>
+                <div class="skill-info">
+                    <h3>天气查询</h3>
+                    <p>输入城市名，返回实时天气、PM2.5、穿衣指数。适用于出差、旅行规划助手。</p>
+                    <div class="skill-tags">
+                        <span class="tag tag-hot">热门</span>
+                        <span class="tag">工具类</span>
+                        <span class="tag">日常生活</span>
+                    </div>
+                </div>
+                <a href="skills/weather-skill.zip" class="download-btn" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                </a>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon">🧾</div>
+                <div class="skill-info">
+                    <h3>文章 / 视频摘要</h3>
+                    <p>输入网址，自动总结文章要点、YouTube 视频内容。支持网页、PDF、本地文件。</p>
+                    <div class="skill-tags">
+                        <span class="tag tag-hot">热门</span>
+                        <span class="tag">效率工具</span>
+                        <span class="tag">AI 能力</span>
+                    </div>
+                </div>
+                <a href="skills/summarize-skill.zip" class="download-btn" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                </a>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon">🐙</div>
+                <div class="skill-info">
+                    <h3>GitHub 管理</h3>
+                    <p>用 gh CLI 管理 issues、PR、CI 状态。查进度、合并代码、查看日志，一条命令搞定。</p>
+                    <div class="skill-tags">
+                        <span class="tag tag-hot">热门</span>
+                        <span class="tag">开发者工具</span>
+                        <span class="tag">代码管理</span>
+                    </div>
+                </div>
+                <a href="skills/github-skill.zip" class="download-btn" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                </a>
             </div>
         </div>
 
-        <div class="skill-card">
-            <div class="skill-icon">📊</div>
-            <div class="skill-info">
-                <h3>Excel 数据分析</h3>
-                <p>上传 Excel 文件，自动生成汇总图表和关键指标。</p>
-                <a href="skills/excel-skill.zip" class="download-btn">下载提示词</a>
+        <div class="section-title">💼 办公效率</div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">📧</div>
+                <div class="skill-info">
+                    <h3>邮件发送</h3>
+                    <p>通过 SMTP 自动发送邮件，支持附件、Gmail / QQ / 企业邮箱。用于日报、周报、定时通知。</p>
+                    <div class="skill-tags">
+                        <span class="tag">办公自动化</span>
+                        <span class="tag">SMTP</span>
+                    </div>
+                </div>
+                <a href="skills/email-skill.zip" class="download-btn" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                </a>
             </div>
+
+            <div class="skill-card">
+                <div class="skill-icon">📊</div>
+                <div class="skill-info">
+                    <h3>Excel 数据分析</h3>
+                    <p>上传 Excel / CSV 文件，自动计算关键指标、生成图表、输出数据摘要报告。</p>
+                    <div class="skill-tags">
+                        <span class="tag">数据分析</span>
+                        <span class="tag">办公自动化</span>
+                    </div>
+                </div>
+                <a href="skills/excel-skill.zip" class="download-btn" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                </a>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon">📝</div>
+                <div class="skill-info">
+                    <h3>Notion 笔记</h3>
+                    <p>连接 Notion API，创建页面、管理数据库、读写笔记内容。打造你的第二大脑。</p>
+                    <div class="skill-tags">
+                        <span class="tag">笔记</span>
+                        <span class="tag">知识管理</span>
+                        <span class="tag">API</span>
+                    </div>
+                </div>
+                <span class="coming-soon">即将上线</span>
+            </div>
+        </div>
+
+        <div class="section-title">🎵 生活娱乐</div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">🎵</div>
+                <div class="skill-info">
+                    <h3>Spotify 音乐控制</h3>
+                    <p>终端里控制 Spotify 播放、搜索歌曲、管理播放列表。需要 Premium 账号。</p>
+                    <div class="skill-tags">
+                        <span class="tag">音乐</span>
+                        <span class="tag">娱乐</span>
+                    </div>
+                </div>
+                <span class="coming-soon">即将上线</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            由 <a href="https://clawhub.ai">clawhub.ai</a> 驱动 · 免费托管 · 开源共建
         </div>
     </div>
-    <div class="footer">由 GitHub Pages 驱动 · 免费托管</div>
 </body>
 </html>
